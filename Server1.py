@@ -2,6 +2,9 @@
 #this server receives a message from client and print it on screen, then wait for another connection requests as well as listen for connected clients
 
 from socket import *
+import datetime
+import time
+import timeit
 import threading
 
 class ThreadedServer():
@@ -9,14 +12,13 @@ class ThreadedServer():
     def listenToClient(self, client, addr):
 
             counter=0
-            self.usernameTaken=False
             answers=[]
-            self.userName= client.recv(1024)
-            print(self.userName.decode("utf-8")) 
+            userName= client.recv(1024)
+            print(userName.decode("utf-8"), "started to quiz") 
             while True:
                 
                 if counter==6:
-                    self.assessment(addr,answers)
+                    self.assessment(addr,answers,userName)
                     print (addr , " is closed")
                     client.close()
                     exit(0)
@@ -29,28 +31,33 @@ class ThreadedServer():
                     exit(0)
 
                 else:
+
+                    answers.append(message.decode("utf-8").upper())
+                    print(userName.decode("utf-8") , "give answer" ,answers[counter], "for question", counter)
+                    ts = time.time()
+                    st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
+                    print(st)
                     counter +=1
-            
-                    answers.append(message.decode("utf-8"))
+                    
     		          
 
-    def assessment(self,addr,answers):
+    def assessment(self,addr,answers,userName):
 
         point = 0
         print(answers)
-        if(answers[0]=="a"):
+        if(answers[0]=="A"):
             point +=1
-        if(answers[1]=="a"):
+        if(answers[1]=="A"):
             point +=1
-        if(answers[2]=="a"):
+        if(answers[2]=="A"):
             point +=1
-        if(answers[3]=="c"):
+        if(answers[3]=="C"):
             point +=1
-        if(answers[4]=="d"):
+        if(answers[4]=="D"):
             point +=1
-        if(answers[5]=="a"):
+        if(answers[5]=="A"):
             point +=1   
-        print("Your Socket Information:: ",str(addr[0]) + ":" +str(addr[1]),"Your Username:", self.userName.decode("utf-8"), "Your grade:"  + str(point) + "/6")        
+        print("Your Socket Information:: ",str(addr[0]) + ":" +str(addr[1]),"Your Username:", userName.decode("utf-8"), "Your grade:"  + str(point) + "/6")        
         if(point<2):
             print("poor performance. you should study hard")
         elif(point<4):
