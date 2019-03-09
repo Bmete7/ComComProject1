@@ -18,7 +18,8 @@ class ThreadedServer():
             while True:
                 
                 if counter==6:
-                    self.assessment(addr,answers,userName)
+                    result = self.assessment(addr,answers,userName)
+                    client.send(result.encode())
                     print (addr , " is closed")
                     client.close()
                     exit(0)
@@ -33,10 +34,11 @@ class ThreadedServer():
                 else:
 
                     answers.append(message.decode("utf-8").upper())
-                    print(userName.decode("utf-8") , "give answer" ,answers[counter], "for question", counter)
+
                     ts = time.time()
                     st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
-                    print(st)
+                    print(userName.decode("utf-8") , "give answer" ,answers[counter], "for question", counter, "timestamp:", st)
+        
                     counter +=1
                     
     		          
@@ -58,6 +60,8 @@ class ThreadedServer():
         if(answers[5]=="A"):
             point +=1   
         print("Your Socket Information:: ",str(addr[0]) + ":" +str(addr[1]),"Your Username:", userName.decode("utf-8"), "Your grade:"  + str(point) + "/6")        
+        result = "Your Socket Information:: " +str(addr[0]) + ":" + str(addr[1])+"Your Username:" + userName.decode("utf-8") + "Your grade:"  + str(point) + "/6"       
+
         if(point<2):
             print("poor performance. you should study hard")
         elif(point<4):
@@ -67,7 +71,7 @@ class ThreadedServer():
         else:
             print("great performance. you are excellent")
 
-           
+        return result
 
     def __init__(self,serverPort):
 
