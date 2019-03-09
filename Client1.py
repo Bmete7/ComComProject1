@@ -1,7 +1,7 @@
 #TCP socket, client, example 2
 #this client connects to the server given with the IP and Port# below and sends a message to server
 from socket import *
-serverName="161.9.40.128"
+serverName="192.168.1.190"
 serverPort=12000
 
 clientSocket=socket(AF_INET,SOCK_STREAM)
