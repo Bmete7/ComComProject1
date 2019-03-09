@@ -18,6 +18,8 @@ if(msg != ''):
 counter = 0
 while True:
     if ( counter == 6):
+        result=clientSocket.recv(1024)
+        print(result.decode("utf-8"))
         clientSocket.close()
         exit(0)
     modifiedMessage=clientSocket.recv(1024)
@@ -31,9 +33,5 @@ while True:
         exit(0)
     else :
         print ("message is sent")
-
-
-
-
 
 
