@@ -6,25 +6,96 @@ import threading
 
 class ThreadedServer():
 
+
     def listenToClient(self, client, addr):
-        
+            counter=0
             while True:
 
-                    message= client.recv(1024)
-                    if message=="exit":
-                        print (addr , " is closed")
-                        client.close()
-                        exit(0)
-                    else:
-                        #question="which version of http is stateless? \n a)http1.0 \n b)http1.1 \n c)both \n d)none"
-                        serverSocket.send("a")
-                        print("Gelen Cevap:" , message.decode("utf-8"))
-		
+                    
+                #question="which version of http is stateless? \n a)http1.0 \n b)http1.1 \n c)both \n d)none"
+                if counter==6:
+                    self.assessment()
+                    print (addr , " is closed")
+                    client.close()
+                    exit(0)
+
+                client.send(self.questions[counter].encode())
+                message= client.recv(1024)
+                if message=="exit":
+                    print (addr , " is closed")
+                    client.close()
+                    exit(0)
+
+                else:
+                    counter +=1
+                    print("Gelen Cevap:" , message.decode("utf-8"))
+                    print(type(message))
+                    self.answers.append(message.decode("utf-8"))
+		          
+
+    def assessment(self):
+        point = 0
+        if(self.answers[0]=="a"):
+            point +=1
+        if(self.answers[1]=="a"):
+            point +=1
+        if(self.answers[2]=="a"):
+            point +=1
+        if(self.answers[3]=="c"):
+            point +=1
+        if(self.answers[4]=="d"):
+            point +=1
+        if(self.answers[5]=="a"):
+            point +=1           
+        print("your grade:",point,"/6")
+        if(point<2):
+            print("poor performance. you should study hard")
+        elif(point<4):
+            print("average performance. you are mediocre")
+        elif(point<=5):
+            print("almost perfect. just study the details")
+        else:
+            print("great performance. you are excellent")
+
+           
 
     def __init__(self,serverPort):
 
+        self.questions=['''which version of http is stateless? 
+        a)http1.0
+        b)http1.1
+        c)both
+        d)none''',
+        '''when we prefer ftp instead of http in file transfer?
+        a)for big amount of data transfer
+        b)sending email to friend
+        c)download image from website
+        d)instant messaging''',
+        '''what is the main difference between end-to-end communication and node-to-node communication?
+        a)physical connection is necessary for node-to-node ralation.
+        b)being in same localhost
+        c)having same default dns server
+        d)having same gateway''',
+        '''which one of below is not application layer protocol?
+        a)http
+        b)smtp
+        c)tcp
+        d)ftp''',
+        '''select the one which is not application layer protocol architecture?
+        a)hybrit
+        b)P2P
+        c)Client-Server
+        d)switching''',
+        '''Select the one which dns maps with the domain name
+        a)IP
+        b)MAC
+        c)socket number
+        d)process ID'''
+        ]
+
+        self.answers=[]
         try:
-            serverSocket=socket(AF_INET,SOCK_STREAM)
+            self.serverSocket=socket(AF_INET,SOCK_STREAM)
 
         except:
     
@@ -34,7 +105,7 @@ class ThreadedServer():
         print ("Socket is created...")
 
         try:
-            serverSocket.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
+           self.serverSocket.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
         except:
     
             print ("Socket cannot be used!!!")
@@ -43,7 +114,7 @@ class ThreadedServer():
         print ("Socket is being used...")
 
         try:
-            serverSocket.bind(('',serverPort))
+            self.serverSocket.bind(('',serverPort))
         except:
         
             print ("Binding cannot de done!!!")
@@ -52,7 +123,7 @@ class ThreadedServer():
         print ("Binding is done...")
 
         try:
-            serverSocket.listen(45)
+            self.serverSocket.listen(45)
         except:
     
             print ("Server cannot listen!!!")
@@ -63,7 +134,7 @@ class ThreadedServer():
 
         while True:
 
-            connectionSocket,addr=serverSocket.accept()
+            connectionSocket,addr=self.serverSocket.accept()
             
             threading.Thread(target = self.listenToClient,args = (connectionSocket,addr)).start()
             
