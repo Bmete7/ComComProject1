@@ -6,15 +6,17 @@ import threading
 
 class ThreadedServer():
 
-
     def listenToClient(self, client, addr):
-            counter=0
-            while True:
 
-                    
-                #question="which version of http is stateless? \n a)http1.0 \n b)http1.1 \n c)both \n d)none"
+            counter=0
+            self.usernameTaken=False
+            answers=[]
+            self.userName= client.recv(1024)
+            print(self.userName.decode("utf-8")) 
+            while True:
+                
                 if counter==6:
-                    self.assessment()
+                    self.assessment(addr,answers)
                     print (addr , " is closed")
                     client.close()
                     exit(0)
@@ -28,26 +30,27 @@ class ThreadedServer():
 
                 else:
                     counter +=1
-                    print("Gelen Cevap:" , message.decode("utf-8"))
-                    print(type(message))
-                    self.answers.append(message.decode("utf-8"))
-		          
+            
+                    answers.append(message.decode("utf-8"))
+    		          
 
-    def assessment(self):
+    def assessment(self,addr,answers):
+
         point = 0
-        if(self.answers[0]=="a"):
+        print(answers)
+        if(answers[0]=="a"):
             point +=1
-        if(self.answers[1]=="a"):
+        if(answers[1]=="a"):
             point +=1
-        if(self.answers[2]=="a"):
+        if(answers[2]=="a"):
             point +=1
-        if(self.answers[3]=="c"):
+        if(answers[3]=="c"):
             point +=1
-        if(self.answers[4]=="d"):
+        if(answers[4]=="d"):
             point +=1
-        if(self.answers[5]=="a"):
-            point +=1           
-        print("your grade:",point,"/6")
+        if(answers[5]=="a"):
+            point +=1   
+        print("Your Socket Information:: ",str(addr[0]) + ":" +str(addr[1]),"Your Username:", self.userName.decode("utf-8"), "Your grade:"  + str(point) + "/6")        
         if(point<2):
             print("poor performance. you should study hard")
         elif(point<4):
