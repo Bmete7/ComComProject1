@@ -7,25 +7,28 @@ serverPort=12000
 clientSocket=socket(AF_INET,SOCK_STREAM)
 
 clientSocket.connect((serverName,serverPort))
-userNameGiven = False
 
+
+
+print('Enter your username for quiz')
+msg=input('')
+if(msg != ''):
+    clientSocket.send(msg.encode())
+    
+counter = 0
 while True:
-    if  (userNameGiven == False):
-        modifiedMessage=clientSocket.recv(1024)
-        print(modifiedMessage.decode("utf-8"))
-        msg=input('')
-        if(msg != ''):
-            userNameGiven = True
-            clientSocket.send(msg.encode())
-    else:
-        modifiedMessage=clientSocket.recv(1024)
-        print ('This is your question:', modifiedMessage.decode("utf-8"))
-        message=input('What is your answer:')
+    if ( counter == 6):
+        clientSocket.close()
+        exit(0)
+    modifiedMessage=clientSocket.recv(1024)
+    print ('This is your question:', modifiedMessage.decode("utf-8"))
+    message=input('What is your answer:')
 
-        clientSocket.send(message.encode())
-        if message=="exit":
-            clientSocket.close()
-            exit(0)
-        else :
-            print ("message is sent")
+    clientSocket.send(message.encode())
+    counter += 1
+    if message=="exit":
+        clientSocket.close()
+        exit(0)
+    else :
+        print ("message is sent")
 
