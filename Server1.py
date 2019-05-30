@@ -1,5 +1,5 @@
-#TCP socket, threaded server, example 2
-#this server receives a message from client and print it on screen, then wait for another connection requests as well as listen for connected clients
+# Burak Mete -150140131
+# İlmiye Elisa Paşaoğlu-150140135
 
 from socket import *
 import datetime
@@ -59,17 +59,20 @@ class ThreadedServer():
             point +=1
         if(answers[5]=="A"):
             point +=1   
-        print("Your Socket Information:: ",str(addr[0]) + ":" +str(addr[1]),"Your Username:", userName.decode("utf-8"), "Your grade:"  + str(point) + "/6")        
-        result = "Your Socket Information:: " +str(addr[0]) + ":" + str(addr[1])+"Your Username:" + userName.decode("utf-8") + "Your grade:"  + str(point) + "/6"       
-
+        print( userName.decode("utf-8") +"-> Socket Information: ",str(addr[0]) + ":" +str(addr[1]), " grade:"  + str(point) + "/6")        
+        
         if(point<2):
-            print("poor performance. you should study hard")
+            success_comment= "poor performance. you should study hard"
         elif(point<4):
-            print("average performance. you are mediocre")
+            success_comment= "average performance. you are mediocre"
         elif(point<=5):
-            print("almost perfect. just study the details")
+            success_comment= "almost perfect. just study the details"
         else:
-            print("great performance. you are excellent")
+            success_comment= "great performance. you are excellent"
+
+        result = "Your Socket Information:: " +str(addr[0]) + ":" + str(addr[1])+"Your Username:" + userName.decode("utf-8") + "Your grade:"  + str(point) + "/6 " + success_comment      
+
+        
 
         return result
 
@@ -137,7 +140,7 @@ class ThreadedServer():
         print ("Binding is done...")
 
         try:
-            self.serverSocket.listen(45)
+            self.serverSocket.listen(1)
         except:
     
             print ("Server cannot listen!!!")

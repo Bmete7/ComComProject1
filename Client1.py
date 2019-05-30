@@ -1,7 +1,9 @@
-#TCP socket, client, example 2
-#this client connects to the server given with the IP and Port# below and sends a message to server
+# Burak Mete -150140131
+# İlmiye Elisa Paşaoğlu-150140135
+
 from socket import *
-serverName="192.168.1.190"
+#serverName="192.168.1.190"
+serverName="localhost"
 serverPort=12000
 
 clientSocket=socket(AF_INET,SOCK_STREAM)
@@ -33,5 +35,6 @@ while True:
         exit(0)
     else :
         print ("message is sent")
+
 
 
